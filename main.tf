@@ -28,9 +28,50 @@ resource "google_compute_address" "proxy_server" {
   name = "proxy-server"
 }
 
+resource "google_compute_firewall" "allow-http" {
+  name    = "allow-http"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["http-server"]
+}
+
+resource "google_compute_firewall" "allow-https" {
+  name    = "allow-https"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["443"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["https-server"]
+}
+
+resource "google_compute_firewall" "allow-frp" {
+  name    = "allow-frp"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["7000"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["frp-server"]
+}
+
 resource "google_compute_instance" "proxy_server" {
   name         = "proxy-server"
   machine_type = "e2-micro"
+
+  tags = ["http-server", "https-server", "frp-server"]
 
   boot_disk {
     initialize_params {

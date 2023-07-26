@@ -1,6 +1,13 @@
 - hosts: all
   gather_facts: false
+  become: true
+  roles:
+    - frps
   tasks:
-    - name: test
-      shell:
-        cmd: echo test
+    - name: Disable SELinux
+      ansible.posix.selinux:
+        state: disabled
+      register: selinux
+    - name: Reboot
+      ansible.builtin.reboot:
+      when: selinux.reboot_required

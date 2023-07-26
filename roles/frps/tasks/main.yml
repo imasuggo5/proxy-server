@@ -1,0 +1,39 @@
+---
+- name: Download frp
+  ansible.builtin.unarchive:
+    src: https://github.com/fatedier/frp/releases/download/v0.51.2/frp_0.51.2_linux_amd64.tar.gz
+    dest: /opt
+    remote_src: true
+    extra_opts:
+      - --transform
+      - s,^[^/]+,frp,x
+- name: Create frps config file
+  ansible.builtin.template:
+    src: frps.ini.j2
+    dest: /opt/frp/frps.ini
+- name: Create frps service file
+  ansible.builtin.copy:
+    src: frps.service
+    dest: /opt/frp/systemd/
+- name: Create frp directory in etc
+  ansible.builtin.file:
+    path: /etc/frp
+    state: directory
+- name: Create symbolic links
+  ansible.builtin.file:
+    state: link
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: /opt/frp/frps.ini, dest: /etc/frp/frps.ini }
+    - { src: /opt/frp/frps, dest: /usr/bin/frps }
+    - {
+        src: /opt/frp/systemd/frps.service,
+        dest: /etc/systemd/system/frps.service,
+      }
+- name: Enable frps service
+  ansible.builtin.systemd:
+    name: frps
+    state: restarted
+    enabled: true
+    daemon-reload: true

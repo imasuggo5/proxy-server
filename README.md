@@ -24,3 +24,6 @@ terraform init && terraform apply -auto-approve
 - [GCE images](https://console.cloud.google.com/compute/images?project=imasuggo5)
 - [GCE meta data](https://cloud.google.com/compute/docs/metadata/default-metadata-values?hl=ja)
 - [frp](https://github.com/fatedier/frp)
+
+### TODO
+- [ ] Optimize SELinux 
