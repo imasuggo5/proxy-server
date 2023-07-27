@@ -4,3 +4,10 @@ authentication_method = token
 token = {{ lookup("community.general.passwordstore", "proxy-server create=true") }}
 vhost_http_port = 80
 vhost_https_port = 443
+
+dashboard_port = 7500
+dashboard_user = admin
+dashboard_pwd = {{ lookup("community.general.passwordstore", "proxy-server/dashboard create=true") }}
+dashboard_tls_mode = true
+dashboard_tls_cert_file = /etc/ssl/crt/{{ domain }}.crt
+dashboard_tls_key_file = /etc/ssl/private/{{ domain }}.pem

@@ -60,7 +60,7 @@ resource "google_compute_firewall" "allow-frp" {
 
   allow {
     protocol = "tcp"
-    ports    = ["7000"]
+    ports    = ["7000", "7500"]
   }
 
   source_ranges = ["0.0.0.0/0"]
@@ -75,7 +75,7 @@ resource "google_compute_instance" "proxy_server" {
 
   boot_disk {
     initialize_params {
-      image = "centos-stream-9-v20230711"
+      image = "centos-stream-8-v20210916"
     }
   }
 

@@ -1,6 +1,9 @@
+# TODO Modify hosts
 - hosts: all
   gather_facts: false
   become: true
+  vars:
+    domain: imasuggo5.com
   roles:
     - frps
   tasks:
