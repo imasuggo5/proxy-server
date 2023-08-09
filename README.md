@@ -11,7 +11,7 @@
 
 ### Run
 ```
-terraform init && terraform apply -auto-approve
+./run.sh
 ```
 
 ### Reference

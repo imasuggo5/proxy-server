@@ -7,13 +7,13 @@ resource "local_file" "proxy_server_pem" {
 data "template_file" "hosts" {
   template = file("hosts.tpl")
   vars = {
-    ansible_host = local.remote_host
-    ansible_user = local.remote_user
+    ansible_host                 = local.remote_host
+    ansible_user                 = local.remote_user
     ansible_ssh_private_key_file = local.remote_key_file
   }
 }
 
 resource "local_file" "hosts" {
-  content = data.template_file.hosts.rendered
+  content  = data.template_file.hosts.rendered
   filename = "${path.module}/../ansible/hosts"
 }

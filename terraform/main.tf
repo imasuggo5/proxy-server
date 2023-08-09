@@ -18,12 +18,6 @@ resource "tls_private_key" "proxy_server" {
   rsa_bits  = 4096
 }
 
-# resource "local_file" "proxy_server_pem" {
-#   content         = tls_private_key.proxy_server.private_key_pem
-#   filename        = "${path.module}/../ansible/.ssh/proxy_server.pem"
-#   file_permission = "0600"
-# }
-
 resource "google_compute_address" "proxy_server" {
   name = "proxy-server"
 }
@@ -98,24 +92,24 @@ locals {
   remote_key_file = local_file.proxy_server_pem.filename
 }
 
-# resource "null_resource" "ansible" {
+resource "null_resource" "wait_for_instance" {
+  triggers = {
+    always_run = timestamp()
+  }
 
-#   triggers = {
-#     always = timestamp()
-#   }
+  depends_on = [
+    google_compute_instance.proxy_server
+  ]
 
-#   depends_on = [
-#     google_compute_instance.proxy_server
-#   ]
+  provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      host        = local.remote_host
+      port        = 22
+      user        = local.remote_user
+      private_key = file(local.remote_key_file)
+    }
 
-#   provisioner "local-exec" {
-#     command = <<EOT
-#     ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook \
-#       -i ${local.remote_host}, \
-#       -u ${local.remote_user} \
-#       --key-file ${local.remote_key_file} \
-#       site.yml
-#     EOT
-#   }
-
-# }
+    inline = ["echo 'The proxy server is ready!'"]
+  }
+}
