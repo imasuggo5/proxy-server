@@ -1,0 +1,11 @@
+---
+- name: Enable frps service
+  ansible.builtin.systemd:
+    name: frps
+    state: restarted
+    enabled: true
+    daemon-reload: true
+
+- name: Reboot
+  ansible.builtin.reboot:
+  when: selinux.reboot_required

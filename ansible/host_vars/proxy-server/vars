@@ -1,0 +1,3 @@
+---
+frps_token: "{{ vault_frps_token }}"
+fpps_dashboard_password: "{{ vault_frps_dashboard_password }}"

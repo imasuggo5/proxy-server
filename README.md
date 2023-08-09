@@ -24,6 +24,8 @@ terraform init && terraform apply -auto-approve
 - [GCE images](https://console.cloud.google.com/compute/images?project=imasuggo5)
 - [GCE meta data](https://cloud.google.com/compute/docs/metadata/default-metadata-values?hl=ja)
 - [frp](https://github.com/fatedier/frp)
+- [Terraform + Ansible example](https://gitlab.com/to-be-continuous/samples/terraform-ansible-on-aws)
+- [Why .terraform.lock.hcl should commit?](https://stackoverflow.com/questions/67963719/should-terraform-lock-hcl-be-included-in-the-gitignore-file)
 
 ### TODO
 - [ ] Optimize SELinux 

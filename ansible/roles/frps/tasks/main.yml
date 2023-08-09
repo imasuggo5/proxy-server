@@ -3,9 +3,11 @@
   ansible.builtin.pip:
     name: pip
     extra_args: --upgrade
+
 - name: Install requirements
   ansible.builtin.pip:
     name: pyOpenSSL
+
 - name: Create ssl subdirectory in etc
   ansible.builtin.file:
     path: "/etc/ssl/{{ item }}"
@@ -14,20 +16,24 @@
     - crt
     - private
     - csr
+
 - name: Generate an ssl private key
   community.crypto.openssl_privatekey:
     path: "/etc/ssl/private/{{ domain }}.pem"
+
 - name: Generate an ssl certificate signing request
   community.crypto.openssl_csr:
     path: "/etc/ssl/csr/{{ domain }}.csr"
     privatekey_path: "/etc/ssl/private/{{ domain }}.pem"
     common_name: "{{ domain }}"
+
 - name: Generate a self signed ssl certificate
   openssl_certificate:
     path: "/etc/ssl/crt/{{ domain }}.crt"
     privatekey_path: "/etc/ssl/private/{{ domain }}.pem"
     csr_path: "/etc/ssl/csr/{{ domain }}.csr"
     provider: selfsigned
+
 - name: Download frp
   ansible.builtin.unarchive:
     src: https://github.com/fatedier/frp/releases/download/v0.51.2/frp_0.51.2_linux_amd64.tar.gz
@@ -36,18 +42,24 @@
     extra_opts:
       - --transform
       - s,^[^/]+,frp,x
+  notify:
+    - Enable frps service
+
 - name: Create frps config file
   ansible.builtin.template:
     src: frps.ini.j2
     dest: /opt/frp/frps.ini
+
 - name: Create frps service file
   ansible.builtin.copy:
     src: frps.service
     dest: /opt/frp/systemd/
+
 - name: Create frp directory in etc
   ansible.builtin.file:
     path: /etc/frp
     state: directory
+
 - name: Create symbolic links
   ansible.builtin.file:
     state: link
@@ -60,9 +72,10 @@
         src: /opt/frp/systemd/frps.service,
         dest: /etc/systemd/system/frps.service,
       }
-- name: Enable frps service
-  ansible.builtin.systemd:
-    name: frps
-    state: restarted
-    enabled: true
-    daemon-reload: true
+
+- name: Disable SELinux
+  ansible.posix.selinux:
+    state: disabled
+  register: selinux
+  notify:
+    - Reboot

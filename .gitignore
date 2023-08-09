@@ -34,3 +34,7 @@ override.tf.json
 terraform.rc
 
 .ssh/
+
+hosts
+
+.vault_pass
