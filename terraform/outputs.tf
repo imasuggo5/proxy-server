@@ -17,3 +17,17 @@ resource "local_file" "hosts" {
   content  = data.template_file.hosts.rendered
   filename = "${path.module}/../ansible/hosts"
 }
+
+data "template_file" "ssh_sh" {
+  template = file("ssh.sh.tpl")
+  vars = {
+    ansible_host                 = local.remote_host
+    ansible_user                 = local.remote_user
+    ansible_ssh_private_key_file = local.remote_key_file
+  }
+}
+
+resource "local_file" "ssh_sh" {
+  content  = data.template_file.ssh_sh.rendered
+  filename = "${path.module}/../ssh.sh"
+}

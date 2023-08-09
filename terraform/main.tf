@@ -89,7 +89,7 @@ resource "google_compute_instance" "proxy_server" {
 locals {
   remote_host     = google_compute_address.proxy_server.address
   remote_user     = "ansible"
-  remote_key_file = local_file.proxy_server_pem.filename
+  remote_key_file = abspath(local_file.proxy_server_pem.filename)
 }
 
 resource "null_resource" "wait_for_instance" {

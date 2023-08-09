@@ -14,6 +14,7 @@
 ./run.sh
 ```
 
+
 ### Reference
 
 - [Terraform](https://developer.hashicorp.com/terraform)
@@ -27,5 +28,8 @@
 - [Terraform + Ansible example](https://gitlab.com/to-be-continuous/samples/terraform-ansible-on-aws)
 - [Why .terraform.lock.hcl should commit?](https://stackoverflow.com/questions/67963719/should-terraform-lock-hcl-be-included-in-the-gitignore-file)
 
+
 ### TODO
-- [ ] Optimize SELinux 
+- [ ] Optimize SELinux
+
+- [ ] Executing terraform, hanged up before. Search the cause if this is occured again.
